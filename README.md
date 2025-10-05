@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# PoC OAuth 2.0 con Google
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación de demostración que muestra cómo implementar OAuth 2.0 con Google, utilizando diferentes tipos de scopes (permisos) para acceder a las APIs de Google.
 
-Currently, two official plugins are available:
+## Tipos de Scopes de Google
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+La aplicación demuestra tres categorías de scopes según las políticas de Google:
 
-## React Compiler
+### Scopes Básicos (No Sensibles)
+Permisos estándar que no requieren verificación especial de Google. Incluyen datos básicos del perfil del usuario.
+- **Información del Usuario**: Nombre, email e ID del usuario autenticado.
+- **Tokens**: Muestra el access token y refresh token obtenidos.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Scopes Sensibles
+Permisos que acceden a datos personales del usuario. Requieren consentimiento explícito y pueden necesitar revisión de Google en producción.
+- **Información del Usuario**: Lo mismo que en scopes básicos.
+- **Números de Teléfono de Contactos**: Lista los números de teléfono de los contactos del usuario (hasta 5).
+- **Eventos del Calendario**: Muestra los eventos del calendario principal (hasta 5).
 
-## Expanding the ESLint configuration
+### Scopes Restringidos
+Permisos de alto riesgo que requieren verificación y aprobación de Google. Solo disponibles para aplicaciones verificadas.
+- **Información del Usuario**: Lo mismo que en scopes básicos.
+- **Archivos de Google Drive**: Lista los archivos recientes en Drive (hasta 10).
+- **Mensajes de Gmail**: Muestra los IDs de los mensajes recientes en Gmail (hasta 5).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Cómo Ejecutar
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Instala dependencias: `npm install`
+2. Configura credenciales de Google OAuth en `.env` (Client ID y Client Secret)
+3. Ejecuta: `npm run dev`
+4. Abre `http://localhost:5173`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Para configurar OAuth: Crea un proyecto en Google Cloud Console, habilita las APIs necesarias y configura credenciales OAuth 2.0 con redirect URI `http://localhost:5173`.
